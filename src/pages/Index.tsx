@@ -4,6 +4,7 @@ import { ValuePropsSection } from "@/components/home/ValuePropsSection";
 import { HowItWorksSection } from "@/components/home/HowItWorksSection";
 import { CommunitySection } from "@/components/home/CommunitySection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
+import { UpcomingFeaturesSection } from "@/components/home/UpcomingFeaturesSection";
 import { CTASection } from "@/components/home/CTASection";
 
 const Index = () => {
@@ -14,6 +15,7 @@ const Index = () => {
       <HowItWorksSection />
       <CommunitySection />
       <TestimonialsSection />
+      <UpcomingFeaturesSection />
       <CTASection />
     </Layout>
   );
