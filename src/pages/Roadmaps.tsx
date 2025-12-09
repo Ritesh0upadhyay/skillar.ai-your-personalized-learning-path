@@ -1,16 +1,16 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles, Code, Database, Palette, MessageCircle, TrendingUp, Brain } from "lucide-react";
+import { ArrowRight, Sparkles, Code, Database, Palette, MessageCircle, TrendingUp, Brain, Share2, Heart } from "lucide-react";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 
 const roadmapExamples = [
-  { icon: Code, title: "Web Development", duration: "3-6 months", level: "Beginner to Pro", color: "from-blue-500 to-cyan-500" },
-  { icon: Database, title: "Data Analyst", duration: "4-8 months", level: "Complete Path", color: "from-purple-500 to-pink-500" },
-  { icon: Palette, title: "UI/UX Design", duration: "2-4 months", level: "Industry Ready", color: "from-orange-500 to-red-500" },
-  { icon: MessageCircle, title: "Communication Skills", duration: "1-3 months", level: "Professional", color: "from-green-500 to-teal-500" },
-  { icon: TrendingUp, title: "Digital Marketing", duration: "3-5 months", level: "Specialist", color: "from-pink-500 to-rose-500" },
-  { icon: Brain, title: "Machine Learning", duration: "6-12 months", level: "Expert", color: "from-indigo-500 to-purple-500" },
+  { icon: Code, title: "Web Development", duration: "3-6 months", level: "Beginner to Pro", color: "from-blue-500 to-cyan-500", shares: 1240 },
+  { icon: Database, title: "Data Analyst", duration: "4-8 months", level: "Complete Path", color: "from-purple-500 to-pink-500", shares: 890 },
+  { icon: Palette, title: "UI/UX Design", duration: "2-4 months", level: "Industry Ready", color: "from-orange-500 to-red-500", shares: 756 },
+  { icon: MessageCircle, title: "Communication Skills", duration: "1-3 months", level: "Professional", color: "from-green-500 to-teal-500", shares: 432 },
+  { icon: TrendingUp, title: "Digital Marketing", duration: "3-5 months", level: "Specialist", color: "from-pink-500 to-rose-500", shares: 567 },
+  { icon: Brain, title: "Machine Learning", duration: "6-12 months", level: "Expert", color: "from-indigo-500 to-purple-500", shares: 1089 },
 ];
 
 const Roadmaps = () => {
@@ -118,14 +118,24 @@ const Roadmaps = () => {
                 className="group cursor-pointer"
               >
                 <div className="p-6 rounded-2xl bg-card border border-border/50 hover:shadow-card transition-all hover:-translate-y-1">
-                  <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${roadmap.color} flex items-center justify-center mb-4`}>
-                    <roadmap.icon className="w-7 h-7 text-white" />
+                  <div className="flex items-start justify-between mb-4">
+                    <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${roadmap.color} flex items-center justify-center`}>
+                      <roadmap.icon className="w-7 h-7 text-white" />
+                    </div>
+                    <button className="p-2 rounded-lg hover:bg-primary/10 transition-colors group/share">
+                      <Share2 className="w-5 h-5 text-muted-foreground group-hover/share:text-primary transition-colors" />
+                    </button>
                   </div>
                   <h3 className="font-display text-xl font-semibold text-foreground mb-2">{roadmap.title}</h3>
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                    <span>{roadmap.duration}</span>
-                    <span>•</span>
-                    <span>{roadmap.level}</span>
+                  <div className="flex items-center justify-between text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2">
+                      <span>{roadmap.duration}</span>
+                      <span>•</span>
+                      <span>{roadmap.level}</span>
+                    </div>
+                    <span className="flex items-center gap-1 text-xs">
+                      <Heart className="w-3 h-3" /> {roadmap.shares}
+                    </span>
                   </div>
                 </div>
               </motion.div>

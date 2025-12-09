@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Clock, Layers, BarChart3, Users } from "lucide-react";
+import { Clock, Layers, BarChart3, Users, Gem, Share2 } from "lucide-react";
 
 const valueProps = [
   {
@@ -22,6 +22,16 @@ const valueProps = [
     title: "Community Support",
     description: "Join study groups, ask questions, and learn with thousands of motivated learners worldwide.",
   },
+  {
+    icon: Gem,
+    title: "Earn Gems & Rewards",
+    description: "Stay active, maintain streaks, and complete tasks to earn gems. Unlock perks like free roadmaps!",
+  },
+  {
+    icon: Share2,
+    title: "Share Roadmaps",
+    description: "Found a great learning path? Share it with friends and help them succeed on their journey too.",
+  },
 ];
 
 export const ValuePropsSection = () => {
@@ -43,7 +53,7 @@ export const ValuePropsSection = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {valueProps.map((prop, index) => (
             <motion.div
               key={index}
