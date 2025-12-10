@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useEffect, useRef, useState, useCallback } from "react";
+import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 
 // Placeholder screenshots - these would be replaced with actual images
@@ -174,31 +174,106 @@ const screenshots = [
 export const LaptopMockup = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"],
-  });
+  const [isLocked, setIsLocked] = useState(false);
+  const lastScrollTime = useRef(0);
+  const scrollCooldown = 400; // ms between scroll changes
 
-  // Update active screenshot based on scroll position
-  useEffect(() => {
-    const unsubscribe = scrollYProgress.on("change", (latest) => {
-      // Map scroll progress to screenshot index
-      const index = Math.min(
-        Math.floor(latest * screenshots.length * 1.5),
-        screenshots.length - 1
-      );
-      setActiveIndex(Math.max(0, index));
-    });
+  // Check if component is in viewport center
+  const checkIfCentered = useCallback(() => {
+    if (!containerRef.current) return false;
+    const rect = containerRef.current.getBoundingClientRect();
+    const viewportHeight = window.innerHeight;
+    const elementCenter = rect.top + rect.height / 2;
+    const viewportCenter = viewportHeight / 2;
+    const tolerance = viewportHeight * 0.3;
+    return Math.abs(elementCenter - viewportCenter) < tolerance;
+  }, []);
+
+  // Handle wheel event for scroll hijacking
+  const handleWheel = useCallback((e: WheelEvent) => {
+    if (!containerRef.current) return;
     
-    return () => unsubscribe();
-  }, [scrollYProgress]);
+    const isCentered = checkIfCentered();
+    const now = Date.now();
+    
+    if (isCentered) {
+      // Scrolling down and not at last screenshot
+      if (e.deltaY > 0 && activeIndex < screenshots.length - 1) {
+        e.preventDefault();
+        if (now - lastScrollTime.current > scrollCooldown) {
+          setActiveIndex(prev => Math.min(prev + 1, screenshots.length - 1));
+          lastScrollTime.current = now;
+        }
+        setIsLocked(true);
+      }
+      // Scrolling up and not at first screenshot
+      else if (e.deltaY < 0 && activeIndex > 0) {
+        e.preventDefault();
+        if (now - lastScrollTime.current > scrollCooldown) {
+          setActiveIndex(prev => Math.max(prev - 1, 0));
+          lastScrollTime.current = now;
+        }
+        setIsLocked(true);
+      }
+      // At boundaries, allow normal scroll
+      else {
+        setIsLocked(false);
+      }
+    } else {
+      setIsLocked(false);
+    }
+  }, [activeIndex, checkIfCentered]);
 
-  const scale = useTransform(scrollYProgress, [0, 0.3], [0.8, 1]);
-  const opacity = useTransform(scrollYProgress, [0, 0.2], [0.5, 1]);
+  // Handle touch events for mobile
+  const touchStartY = useRef(0);
+  
+  const handleTouchStart = useCallback((e: TouchEvent) => {
+    touchStartY.current = e.touches[0].clientY;
+  }, []);
+
+  const handleTouchMove = useCallback((e: TouchEvent) => {
+    if (!containerRef.current) return;
+    
+    const isCentered = checkIfCentered();
+    const now = Date.now();
+    const deltaY = touchStartY.current - e.touches[0].clientY;
+    
+    if (isCentered && Math.abs(deltaY) > 30) {
+      // Swiping up (scrolling down content)
+      if (deltaY > 0 && activeIndex < screenshots.length - 1) {
+        e.preventDefault();
+        if (now - lastScrollTime.current > scrollCooldown) {
+          setActiveIndex(prev => Math.min(prev + 1, screenshots.length - 1));
+          lastScrollTime.current = now;
+          touchStartY.current = e.touches[0].clientY;
+        }
+      }
+      // Swiping down (scrolling up content)
+      else if (deltaY < 0 && activeIndex > 0) {
+        e.preventDefault();
+        if (now - lastScrollTime.current > scrollCooldown) {
+          setActiveIndex(prev => Math.max(prev - 1, 0));
+          lastScrollTime.current = now;
+          touchStartY.current = e.touches[0].clientY;
+        }
+      }
+    }
+  }, [activeIndex, checkIfCentered]);
+
+  useEffect(() => {
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+    };
+  }, [handleWheel, handleTouchStart, handleTouchMove]);
 
   return (
-    <div ref={containerRef} className="relative pb-6">
+    <div ref={containerRef} className="relative py-8">
       {/* Step Indicators */}
       <div className="absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 z-20 hidden md:flex flex-col gap-4">
         {screenshots.map((screenshot, index) => (
@@ -229,9 +304,23 @@ export const LaptopMockup = () => {
         ))}
       </div>
 
+      {/* Scroll Hint */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isLocked ? 1 : 0 }}
+        className="absolute top-2 left-1/2 -translate-x-1/2 z-30 px-4 py-2 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20"
+      >
+        <span className="text-xs text-primary font-medium">
+          Scroll to navigate • {activeIndex + 1}/{screenshots.length}
+        </span>
+      </motion.div>
+
       {/* Laptop Frame */}
       <motion.div
-        style={{ scale, opacity }}
+        initial={{ scale: 0.9, opacity: 0 }}
+        whileInView={{ scale: 1, opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
         className="relative mx-auto max-w-4xl"
       >
         {/* Laptop Screen */}
