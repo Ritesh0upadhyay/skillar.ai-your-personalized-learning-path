@@ -1,10 +1,23 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles, Zap, Target } from "lucide-react";
+import { ArrowRight, Sparkles, Zap, Target, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LaptopMockup } from "./LaptopMockup";
 
 export const HeroSection = () => {
+  const [prompt, setPrompt] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (prompt.trim()) {
+      navigate(`/signup?goal=${encodeURIComponent(prompt.trim())}`);
+    } else {
+      navigate("/signup");
+    }
+  };
+
   return (
     <section className="relative overflow-hidden bg-gradient-hero">
       {/* Background decorations */}
@@ -51,23 +64,58 @@ export const HeroSection = () => {
             Our AI creates personalized learning paths tailored to your goals, pace, and schedule.
           </motion.p>
 
-          {/* CTAs */}
-          <motion.div
+          {/* Prompt Input Box */}
+          <motion.form
+            onSubmit={handleSubmit}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="flex flex-col sm:flex-row items-center gap-4 mb-16"
+            className="w-full max-w-2xl mb-16"
           >
-            <Button variant="hero" size="xl" asChild>
-              <Link to="/signup" className="gap-2">
-                Build Your First Roadmap — FREE
-                <ArrowRight className="w-5 h-5" />
-              </Link>
-            </Button>
-            <Button variant="outline-light" size="lg" asChild>
-              <Link to="/roadmaps">See Examples</Link>
-            </Button>
-          </motion.div>
+            <div className="relative group">
+              {/* Glow effect */}
+              <div className="absolute -inset-1 bg-gradient-to-r from-primary via-accent to-primary rounded-2xl blur-lg opacity-40 group-hover:opacity-60 transition-opacity duration-500 animate-pulse" />
+              
+              {/* Input container */}
+              <div className="relative flex items-center bg-card/80 backdrop-blur-xl rounded-2xl border border-border/50 shadow-2xl overflow-hidden">
+                <div className="flex items-center pl-5 text-muted-foreground">
+                  <Search className="w-5 h-5" />
+                </div>
+                <input
+                  type="text"
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  placeholder="What do you want to learn? e.g., Web Development, Data Science..."
+                  className="flex-1 bg-transparent px-4 py-5 text-foreground placeholder:text-muted-foreground/60 focus:outline-none text-base sm:text-lg"
+                />
+                <Button
+                  type="submit"
+                  variant="hero"
+                  size="lg"
+                  className="m-2 px-6 gap-2 shrink-0"
+                >
+                  <span className="hidden sm:inline">Generate Roadmap</span>
+                  <span className="sm:hidden">Start</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+            
+            {/* Quick suggestions */}
+            <div className="flex flex-wrap items-center justify-center gap-2 mt-4">
+              <span className="text-sm text-muted-foreground">Try:</span>
+              {["Web Development", "Machine Learning", "UI/UX Design", "Python"].map((suggestion) => (
+                <button
+                  key={suggestion}
+                  type="button"
+                  onClick={() => setPrompt(suggestion)}
+                  className="px-3 py-1.5 text-sm rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-colors border border-primary/20"
+                >
+                  {suggestion}
+                </button>
+              ))}
+            </div>
+          </motion.form>
 
           {/* Stats */}
           <motion.div
