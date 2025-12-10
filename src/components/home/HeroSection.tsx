@@ -58,7 +58,7 @@ export const HeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-lg sm:text-xl text-muted-foreground max-w-2xl mb-8"
+            className="text-lg sm:text-xl text-muted-foreground max-w-2xl mb-12"
           >
             Get started with <span className="text-primary font-semibold">3 free custom roadmaps</span>. 
             Our AI creates personalized learning paths tailored to your goals, pace, and schedule.
@@ -70,7 +70,7 @@ export const HeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="w-full max-w-2xl mb-16"
+            className="w-full max-w-2xl mt-4 mb-20"
           >
             <div className="relative group">
               {/* Glow effect */}

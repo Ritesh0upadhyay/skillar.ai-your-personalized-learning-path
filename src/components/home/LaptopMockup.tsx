@@ -198,7 +198,7 @@ export const LaptopMockup = () => {
   const opacity = useTransform(scrollYProgress, [0, 0.2], [0.5, 1]);
 
   return (
-    <div ref={containerRef} className="relative py-10">
+    <div ref={containerRef} className="relative pb-6">
       {/* Step Indicators */}
       <div className="absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 z-20 hidden md:flex flex-col gap-4">
         {screenshots.map((screenshot, index) => (
@@ -305,7 +305,7 @@ export const LaptopMockup = () => {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="text-center mt-8"
+        className="text-center mt-4"
       >
         <p className="text-lg font-medium text-foreground">
           Step {activeIndex + 1}: {screenshots[activeIndex].title}
