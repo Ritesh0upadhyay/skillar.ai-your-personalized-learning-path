@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Zap, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { LaptopMockup } from "./LaptopMockup";
 
 export const HeroSection = () => {
   return (
@@ -73,7 +74,7 @@ export const HeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="flex flex-wrap items-center justify-center gap-8 lg:gap-16"
+            className="flex flex-wrap items-center justify-center gap-8 lg:gap-16 mb-16"
           >
             {[
               { icon: Zap, label: "Roadmaps Generated", value: "50K+" },
@@ -93,65 +94,8 @@ export const HeroSection = () => {
           </motion.div>
         </div>
 
-        {/* Hero Visual */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.5 }}
-          className="relative mx-auto max-w-5xl pb-20"
-        >
-          <div className="relative rounded-2xl overflow-hidden shadow-card border border-border/50 bg-card">
-            {/* Mock Roadmap UI */}
-            <div className="p-6 lg:p-8">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-3 h-3 rounded-full bg-destructive" />
-                <div className="w-3 h-3 rounded-full bg-accent" />
-                <div className="w-3 h-3 rounded-full bg-primary" />
-              </div>
-              
-              <div className="space-y-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-gradient-primary flex items-center justify-center text-primary-foreground font-bold">1</div>
-                  <div className="flex-1">
-                    <div className="h-4 bg-primary/20 rounded-full w-48 mb-2" />
-                    <div className="h-3 bg-muted rounded-full w-72" />
-                  </div>
-                  <div className="px-3 py-1 rounded-full bg-accent/20 text-accent text-sm font-medium">In Progress</div>
-                </div>
-                
-                <div className="ml-5 w-0.5 h-8 bg-border" />
-                
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground font-bold">2</div>
-                  <div className="flex-1">
-                    <div className="h-4 bg-muted rounded-full w-40 mb-2" />
-                    <div className="h-3 bg-muted rounded-full w-64" />
-                  </div>
-                  <div className="px-3 py-1 rounded-full bg-muted text-muted-foreground text-sm font-medium">Upcoming</div>
-                </div>
-                
-                <div className="ml-5 w-0.5 h-8 bg-border" />
-                
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-muted-foreground font-bold">3</div>
-                  <div className="flex-1">
-                    <div className="h-4 bg-muted rounded-full w-56 mb-2" />
-                    <div className="h-3 bg-muted rounded-full w-80" />
-                  </div>
-                  <div className="px-3 py-1 rounded-full bg-muted text-muted-foreground text-sm font-medium">Upcoming</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Floating elements */}
-          <div className="absolute -top-4 -right-4 px-4 py-2 rounded-xl bg-accent text-accent-foreground font-medium shadow-soft animate-float">
-            <span className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4" />
-              AI Generating...
-            </span>
-          </div>
-        </motion.div>
+        {/* Laptop Mockup with Scroll Animation */}
+        <LaptopMockup />
       </div>
     </section>
   );
